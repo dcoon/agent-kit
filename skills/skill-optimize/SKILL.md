@@ -1,5 +1,5 @@
 ---
-name: llm-optimize-skill
+name: skill-optimize
 description: Transforms verbose, human-authored Markdown skills into a terse, token-optimized format for LLM consumption.
 license: MIT
 compatibility: opencode

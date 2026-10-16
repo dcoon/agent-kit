@@ -1,5 +1,5 @@
 ---
-name: product-development
+name: pm-research
 description: Evaluates new product concepts, features, or business models across shifting executive personas. Cycles through perspectives interactively and outputs markdown decisions briefs.
 license: MIT
 compatibility: opencode

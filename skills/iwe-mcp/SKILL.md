@@ -1,3 +1,15 @@
+---
+name: iwe-mcp
+description: Use IWE MCP tools for all vault reads, searches, and writes, and query and move notes safely.
+license: MIT
+compatibility: opencode
+metadata:
+  audience: developers
+  workflow: iwe-vault-access
+  opencode/slash: true
+  opencode/autoinvoke: false
+---
+
 # IWE Query Skill
 
 ## 1. Vault Access
