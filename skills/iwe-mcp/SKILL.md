@@ -39,6 +39,16 @@ metadata:
 
 - Use `iwe_retrieve` with 1–3 known keys for full content and references.
 
+## 2b. Link Resolution
+
+- Never guess a path. A wiki link names a note, not its folder.
+- To resolve targets from a page, use `iwe_retrieve` with `expand: { references: 1 }` on the source key. `references` returns each outbound link with its resolved key.
+- A link missing from `references` is unresolved. Check it before treating it as a new note.
+- Do not use `fuzzy` search to resolve a link. Fuzzy search ranks by title similarity and can bury the right note under same-named journal entries.
+- If `references` has no match, run an exact title lookup with `iwe_query`, filtered on `$title`, and report the results.
+- If more than one note matches, ask the user. Don't pick one.
+- Report "not found" only after both steps.
+
 ## 3. Known Quirks
 
 - `project` in `iwe_query` must be a mapping. In `iwe_find` it must be a string.
