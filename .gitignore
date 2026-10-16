@@ -1,0 +1,40 @@
+# Obsidian vault settings (per-machine workspace state)
+.obsidian/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors and IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Secrets and local environment
+.env
+.env.*
+*.key
+*.pem
+
+# Logs and caches
+*.log
+.cache/
+
+# Dependencies and build output
+node_modules/
+dist/
+build/
+coverage/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Archives
+*.zip
+*.tar
+*.tar.gz
