@@ -5,3 +5,4 @@
 - Check CLI flags before scripting: run `npx skills add --help` and confirm behavior before relying on flags such as repeated `--skill`.
 - Ask before destructive changes: confirm before deleting, renaming, or overwriting user files.
 - Keep files in their folder: role prompts in `prompts/`, skill sets in `skillsets/`, and only `skills/<name>/SKILL.md` for skills read by `npx skills`.
+- Markdown is code: treat `.md` prompts, skills, and schemas as source. Review, verify, and commit them with the same rigor as code changes.
