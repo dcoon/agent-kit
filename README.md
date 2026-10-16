@@ -56,4 +56,4 @@ Each skill lives in its own folder under `skills/`. The folder name should match
 
 ## License
 
-TBD
+MIT
