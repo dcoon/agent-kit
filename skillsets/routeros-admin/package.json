@@ -1,0 +1,33 @@
+{
+  "private": true,
+  "skills": [
+    {
+      "source": "tikoci/routeros-skills",
+      "skills": [
+        "routeros-fundamentals",
+        "routeros-firewall",
+        "routeros-container",
+        "routeros-sniffer",
+        "routeros-mndp",
+        "routeros-hotspot",
+        "routeros-app-yaml",
+        "routeros-qemu-chr",
+        "routeros-netinstall",
+        "routeros-mac-telnet",
+        "routeros-quickchr",
+        "routeros-centrs",
+        "routeros-quickchr-cli"
+      ]
+    },
+    {
+      "source": "iuliandita/skills",
+      "skills": ["debian-ubuntu"]
+    }
+  ],
+  "devDependencies": {
+    "skills-npm": "*"
+  },
+  "scripts": {
+    "prepare": "skills-npm"
+  }
+}
