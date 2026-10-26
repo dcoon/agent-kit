@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "skills": [
+    { "source": "dcoon/agent-kit" }
+  ],
+  "devDependencies": {
+    "skills-npm": "*"
+  },
+  "scripts": {
+    "prepare": "skills-npm"
+  }
+}
