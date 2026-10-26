@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/skills.json",
+  "skills": [
+    {
+      "name": "clean-code",
+      "source": "dcoon/agent-kit",
+      "path": "skills/clean-code/SKILL.md"
+    },
+    {
+      "name": "stop-slop",
+      "source": "hardikpandya/stop-slop",
+      "path": "SKILL.md"
+    }
+  ]
+}
