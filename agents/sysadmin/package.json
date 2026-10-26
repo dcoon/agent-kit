@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "skills": [
+    {
+      "source": "tikoci/routeros-skills"
+    },
+    {
+      "source": "iuliandita/skills",
+      "skills": ["debian-ubuntu"]
+    },
+    { "source": "docker/skills"},
+    {"source": "juliusbrussee/caveman"},
+    {"source": "hardikpandya/stop-slop"}
+  ],
+  "devDependencies": {
+    "skills-npm": "*"
+  },
+  "scripts": {
+    "prepare": "skills-npm"
+  }
+}
