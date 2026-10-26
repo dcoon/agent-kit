@@ -1,0 +1,10 @@
+{
+  "name": "agent-kit",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Agent skills kit. Install the skill set with: npx skills experimental_sync -y",
+  "skills": [
+    "dcoon/agent-kit",
+    "vercel-labs/skills@find-skills"
+  ]
+}
