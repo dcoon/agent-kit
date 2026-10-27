@@ -1,6 +1,7 @@
 ---
 name: iwe-mcp
-description: Use IWE MCP tools for all vault reads, searches, and writes, and query and move notes safely.
+deprecated: true
+description: 'Deprecated: iwe is retired — use the obsidian MCP server via wiki-schema and wiki-ingest for vault access. This skill is kept for reference only and should not be loaded.'
 license: MIT
 compatibility: opencode
 metadata:
