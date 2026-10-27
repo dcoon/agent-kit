@@ -1,6 +1,6 @@
 ---
 name: wiki-ingest
-description: Ingest tagged entity headings from journal entries into the wiki. Load when the user names a journal entry or says "journal" or "journal entry", or asks to scan journal entries modified in the last N days (default 7) for entities. Looks for headings with a wiki link and a type tag (e.g. "# [[Name]] #project"), then upserts the target note with information from beneath the heading. Writes via the obsidian MCP server.
+description: 'Ingest entity information into wiki notes from tagged headings. Use when: the user says "ingest" (today, a journal entry, a page, or a specific heading), names a journal entry, or asks to scan the last N days (default 7) for entities. Finds headings that are wiki links (e.g. "# [[Name]] #project"), then upserts the target note with information from beneath the heading. Writes via the obsidian MCP server.'
 license: MIT
 compatibility: opencode
 metadata:
@@ -17,9 +17,13 @@ Turn tagged entity headings in journal entries into up-to-date target notes. The
 
 ## Scope
 - "Journal" or "journal entry" = `journal/YYYY-MM-DD` notes (e.g. [[2026-10-15]]).
-- Entry points:
-  1. **Named entry:** the journal note the user mentions, or the one currently open.
-  2. **Scan N days:** the N most recent daily notes (default 7), via the `periodic` tool (daily, action `list`, limit N). Never scan the whole vault.
+- Source selection — two defaults:
+  1. Page not given → today's journal note.
+  2. Heading not given → the entire source page.
+- So: "ingest today" → today's journal, whole page. "ingest heading X from today" → only heading X's section of today's journal. "ingest page X" → page X, whole page. "ingest page X, heading Y" → only Y's section of page X.
+- A heading's section = the heading plus everything beneath it until a heading of the same or higher level (subsections included). When a heading is given, process only that section.
+- CHK: Any vault page is a valid source, not just journal notes — same qualification and target rules apply.
+- **Scan N days** (when the user asks to scan): the N most recent daily notes (default 7), via the `periodic` tool (daily, action `list`, limit N). Never scan the whole vault.
 
 ## Guards
 - Vault reads and writes go through the obsidian MCP server (see wiki-schema Access). Load `wiki-schema` before any write; follow its naming, typing, provenance, and archive rules.
@@ -39,6 +43,7 @@ The type tag (e.g. `#project`, `#person`, `#asset`, `#idea`) is optional:
 - Existing entity: the tag may be omitted. Use the existing note's type.
 
 Skip silently any heading with no link or no content beneath. These are backlink-only.
+Exception: a heading the user explicitly named → don't skip silently; report why it doesn't qualify and ask how to proceed.
 
 ## Target location
 - `#project` → `projects/<Name>.md`.
