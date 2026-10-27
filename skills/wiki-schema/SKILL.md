@@ -19,6 +19,7 @@ metadata:
 *What it does: selects the backend for note operations.*
 
 - EXEC: Run all note operations through the `obsidian` MCP server. Steps in this skill refer to abstract operations; resolve them via the table below.
+- EXEC: Read `wiki/memory/MEMORY.md` (agent memory) at the start of wiki work; scan its `## Tasks` before closing the turn. See the `wiki-memory` skill.
 - GUARD: Shell commands and scripts may touch the vault only when the user explicitly gives permission. Otherwise use `obsidian` tools.
 - Frontmatter edits use `frontmatter`; note metadata (tags, headings, links) via `note_inspect`.
 
@@ -41,7 +42,7 @@ metadata:
 - GUARD: Never overwrite/remove human-authored content unless user explicitly asks.
 - GUARD: Human-authored notes (journal, page notes): write only when user asks.
 - Autonomy: notes the agent minted (creation recorded in `## Provenance`) may be updated without asking; append Provenance per the rules below.
-- `wiki/memory/` is agent-owned; see the `wiki-memory` skill.
+- `wiki/memory/MEMORY.md` is agent-owned; see the `wiki-memory` skill.
 
 ## Dates
 
