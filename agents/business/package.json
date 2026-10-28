@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "description": "Business mode: proposals, invoices, customer docs, spreadsheets.",
+  "skills": [
+    "anthropics/skills@docx",
+    "anthropics/skills@pdf",
+    "anthropics/skills@xlsx",
+    "mattpocock/skills@grill-me"
+  ]
+}

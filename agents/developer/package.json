@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "description": "Developer mode: implement and test in the current project.",
+  "skills": [
+    "mattpocock/skills@implement",
+    "mattpocock/skills@tdd",
+    "wshobson/agents@debugging-strategies"
+  ]
+}

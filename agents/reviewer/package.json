@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "description": "Reviewer mode: read-only second pass on agent output.",
+  "skills": [
+    "mattpocock/skills@code-review"
+  ]
+}

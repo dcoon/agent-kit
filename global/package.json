@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "description": "Global skills: loaded in every session, every project. Cap this at five.",
+  "skills": [
+    "dcoon/agent-kit@skill-reviewer",
+    "vercel-labs/skills@find-skills",
+    "juliusbrussee/caveman@caveman",
+    "hardikpandya/stop-slop"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "description": "Wiki mode: Obsidian vault ingest, memory, and schema.",
+  "skills": [
+    "dcoon/agent-kit@wiki-schema",
+    "dcoon/agent-kit@wiki-ingest",
+    "dcoon/agent-kit@wiki-memory",
+    "dcoon/agent-kit@iwe-mcp"
+  ]
+}

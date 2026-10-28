@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "description": "Researcher mode: read-only sourcing, comparison, and recommendations.",
+  "skills": [
+    "mattpocock/skills@research",
+    "vercel-labs/skills@find-skills"
+  ]
+}

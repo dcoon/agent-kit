@@ -24,6 +24,5 @@
 ## Tools & Skills
 
 - RUN: all vault access and IWE usage follows the `iwe-mcp` skill.
-- RUN: load `wiki-markdown` only when writing/modifying Markdown in the vault; never for read-only queries or general chat.
 - RUN: load `wiki-schema` when classifying, creating, or modifying entity notes, and for any vault write, including tasks, memories, dates, and assets.
 - RUN: load `iwe-mcp` for `iwe_query` syntax, block predicates (`$contains: { $text: ... }`), projections; whenever querying note content, projecting blocks, or mutating structures via IWE.

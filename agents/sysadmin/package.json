@@ -1,21 +1,10 @@
 {
   "private": true,
+  "description": "Sysadmin mode: hosts, network, routing, reverse proxy.",
   "skills": [
-    {
-      "source": "tikoci/routeros-skills"
-    },
-    {
-      "source": "iuliandita/skills",
-      "skills": ["debian-ubuntu"]
-    },
-    { "source": "docker/skills"},
-    {"source": "juliusbrussee/caveman"},
-    {"source": "hardikpandya/stop-slop"}
-  ],
-  "devDependencies": {
-    "skills-npm": "*"
-  },
-  "scripts": {
-    "prepare": "skills-npm"
-  }
+    "tikoci/routeros-skills@routeros-fundamentals",
+    "tikoci/routeros-skills@routeros-firewall",
+    "iuliandita/skills@debian-ubuntu",
+    "dcoon/agent-kit@zoraxy"
+  ]
 }
