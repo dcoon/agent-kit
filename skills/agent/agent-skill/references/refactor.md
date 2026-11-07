@@ -14,9 +14,11 @@ Review and optimize an existing or newly scaffolded skill for token efficiency, 
 
 ## Process
 
-1. Locate the target: the user gives a skill name or path. Read `SKILL.md` fully and list the bundled files (typically under `scripts/`, `references/`, `assets/`).
-2. Measure with `wc -lc`: `SKILL.md` plus every other text file you actually inspect in this review. Skip binary assets. Bytes approximate size; they are not tokens.
-3. Run the three checklists below.
+1. Locate the target: the user gives a skill name or path. Scope the review by target:
+   - Skill or `SKILL.md`: read `SKILL.md` fully and list the bundled files (typically under `scripts/`, `references/`, `assets/`).
+   - Single reference file: read it fully. Inspect the parent `SKILL.md` or other files only when needed and the user's scope permits.
+2. Measure with `wc -lc`: the target plus every other text file you actually inspect in this review. Skip binary assets. Bytes approximate size; they are not tokens.
+3. Run the checklists that apply to the target. The SKILL.md-specific frontmatter requirements below apply only to an actual skill `SKILL.md`, not to reference files. Reference file YAML may still be checked for correctness when requested.
 4. Report findings (template below). Quote the file as evidence; never rely on memory, since the file may have changed.
 5. Report or propose edits only; apply them when the user has explicitly authorized editing. After editing, re-measure and report before → after.
 
