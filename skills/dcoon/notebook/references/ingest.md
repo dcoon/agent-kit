@@ -101,3 +101,23 @@ Output (proposed): add to `wiki/graph/Lisa - Martin Lane Neighbor.md` under Note
 
 Input: "Lisa Martin's phone number is 415-290-2054" under `# [[Lisa - Martin Lane Neighbor]] #person`
 Output (proposed): set `phone: 415-290-2054` in frontmatter, replacing any previous value, and note the change under Provenance.
+
+## Workflow for Minting & Updating Entities
+
+*What it does: gates and steps for creating/updating entity notes.*
+
+GUARD: Mint only when user asks. Don't infer a mint request from a classification question.
+Autonomy: updates to agent-minted notes (see Writing Rules) may proceed without asking; all other updates wait for the user.
+
+- HALT: Blank or one-line content → don't mint. A one-line update to an existing entity → update it.
+- HALT: Type can't be classified with confidence → don't mint.
+- Heading-based ingestion (journal heading → entity note) follows the `wiki-ingest` skill; the link format is `# [[Name]] #type`.
+- Link target missing → mint note with name matching the link, or update the source link. Human source notes need user approval before any link change.
+- CHK: Clicking an unresolved link in Obsidian creates an empty note. After minting, check for it; delete if it duplicates the new note.
+
+1. **Deduplicate**: CHK: Before minting, use the find operation to look for an existing note for the same entity. Exists → update, don't duplicate.
+2. **Minting**: EXEC: Start new note with short summary/description of the entity; cite claims with footnotes (see Provenance). No mandatory sections.
+3. **Additive Updates**:
+   - GUARD: Human-authored content stays untouched (see Writing Rules).
+   - GUARD: Never copy tasks (`- [ ]` / `- [x]`) into graph nodes. Tasks stay in source notes and surface via backlinks.
+   - GUARD: Never copy source content. Link to it; short quotes or summaries OK.
