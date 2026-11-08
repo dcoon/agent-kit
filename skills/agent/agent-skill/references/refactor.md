@@ -36,7 +36,7 @@ Tags: `[spec]` is a hard Agent Skills requirement; a violation is `must-fix`. `[
 ## Token checks
 
 - Keep `SKILL.md` under about 500 lines, per the spec's guidance. This is a heuristic, not a requirement; judge by whether content is needed on activation.
-- Simple skills may be self-contained in `SKILL.md`. Move detailed or conditional guidance to `references/` when that saves tokens on activation, and say when to read each file. Use `scripts/` for deterministic, repeated work when appropriate.
+- Simple skills may be self-contained in `SKILL.md`. Move detailed or conditional guidance to `references/` when that saves tokens on activation, and say when to read each file. Use `scripts/` for deterministic, repeated work when the same steps recur across runs or must produce identical results.
 - Files in `references/` longer than about 100 lines should start with a table of contents (Anthropic best-practice guidance).
 - Remove redundant instructions and examples within and across skill files; retain brief summaries and examples that serve a distinct purpose.
 - Prefer trusted, available tool help or documentation over copied option lists. Keep essential commands, workflow decisions, and project-specific constraints. If help is unavailable, report the limitation; do not download or install tools without authorization.
