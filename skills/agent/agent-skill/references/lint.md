@@ -15,14 +15,13 @@ metadata:
 
 ## Process
 
-1. Run lintlang
+1. Run lintlang on skills specified by user. If no skills specified, use pwd.
 	1. Exec `uvx --offline lintlang scan <path>` on the dir or filenames to be linted. If it fails because lintlang is not cached, report the blocker; do not download or install without explicit user authorization.
-	2. Review findings and give recommendations to user
-	3. Fix if user approves recommendations.
+2. Reply findings to user
 
 ## Guards
 
-1. Only edit files after user approval
+1. Never edit files. 
 
 ## Additional Information
 
