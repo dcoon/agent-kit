@@ -1,5 +1,6 @@
 # Obsidian vault settings (per-machine workspace state)
 .obsidian/
+.opencode/
 
 # OS files
 .DS_Store
