@@ -14,15 +14,17 @@ skill-name/
 ├── SKILL.md          # Required: metadata + instructions
 ├── scripts/          # Optional: executable code
 ├── references/       # Optional: documentation and additional instructions
-# SKILLS.md
+# SKILL.md
 
-Sections to include in SKILLS.md and references files. Sections not tagged #optional are required. 
+Sections to include in SKILL.md and references files. Sections not tagged #optional are required.
 ## Frontmatter
 
 | Field         | Required | Constraints                                                                                                                        |
 | ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `name`        | Yes      | Max 64 characters. Lowercase letters, numbers, and hyphens only. Must not start or end with a hyphen.  Matches the directory name. |
 | `description` | Yes      | Max 1024 characters. Non-empty. Describes what the skill does and when to use it.                                                  |
+| `author`      | No       | Top-level field. Author of the skill, e.g. `dcoon/agent-kit`.                                                                      |
+| `tags`        | No       | Top-level field. YAML list of tags, e.g. `- skills`.                                                                               |
 | metadata      | No       | {"source": "https://github.com/dcoon/agent-kit"}                                                                                   |
 ## Workflow
 

@@ -4,11 +4,7 @@ description: Validate AGENT, PROMPT, SKILLS, and references are formatted correc
 license: MIT
 metadata:
   audience: developers
-  workflow: prompt-optimization
   version: 1.0.0
-  triggers: optimize skill, compress markdown prompt, token optimization
-  requirements: "input_file: *.md"
-  cache: true
   opencode/slash: true
   opencode/autoinvoke: false
 ---
@@ -37,12 +33,12 @@ metadata:
 
 ### Frontmatter
 
-- YAML frontmatter is present and conforms with [[template]].
+- YAML frontmatter is present and conforms with [template](template.md).
 - `description` states what the skill does and when to use it, with concrete trigger phrases and keywords. Name and description are the metadata usually loaded up front for discovery, so keep them concise and specific enough to distinguish the skill from similar ones. Flag vague one-liners.
 
 ### Template
 
-- Body conforms with [[template]].  Mandatory (not tagged #optional in template) must be present.
+- Body conforms with [template](template.md).  Mandatory (not tagged #optional in template) must be present.
 
 ### References
 

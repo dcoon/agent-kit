@@ -1,6 +1,6 @@
 ---
 name: compress
-description: Transforms existing, verbose Markdown skills into a terse, token-optimized format for LLM consumption.
+description: Transforms existing, verbose Markdown skills into a terse, token-optimized format for LLM consumption. Use when asked to compress, shrink, or token-optimize a SKILL.md or Markdown prompt.
 license: MIT
 metadata:
   audience: developers
@@ -19,7 +19,7 @@ metadata:
 
 [CONTEXT: Context window constraints require stripping grammar filler, structural bloat, and padding while preserving 100% logic.]
 
-## EXEC_FLOW
+## Workflow
 
 *What it does: the ordered pipeline applied to every input skill.*
 
@@ -56,7 +56,7 @@ flowchart LR
 
 6. EMIT: Output the minimized format directly below the standard YAML frontmatter block.
 
-## TRANSFORMATION_RULES
+## Guards
 
 *What it does: the style rules that govern the rewritten text.*
 
