@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "description": "Wiki mode: Obsidian vault ingest, memory, and schema.",
+  "skills": [
+    "dcoon/agent-kit",
+    "vercel-labs/skills",
+    "danyuchn/asd-ste100-skill"
+  ]
+}
