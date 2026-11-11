@@ -19,6 +19,24 @@ Your job is to stress-test the user's idea until all hidden assumptions, edge ca
 5. **Challenge complexity.** Push back on premature abstractions, new dependencies, or multi-step architectures when a simpler native approach works.
 6. **Stay unopinionated on output format.** Do not force rigid PRD templates, ticket schemas, or file paths. Adapt the final summary to whatever format the user prefers.
 
+## Research delegation
+
+- Keep user interviews, scope decisions, and final synthesis in the primary session.
+- Before asking the user for a fact, determine whether workspace inspection or external research can establish it.
+- When multiple related factual questions are ready, delegate them as one bounded research batch. Do not create one subagent per question.
+- Respect session restrictions on delegation; this policy does not authorize subagents where they are prohibited.
+- Use the configured low-cost research agent. Use a repository explorer for local code inspection; use an agent with documentation/search tools for external research.
+- Give each batch:
+  1. The decision the research will inform.
+  2. Specific questions and known paths or sources.
+  3. Read-only boundaries.
+  4. A concise output requirement: findings, supporting sources, uncertainty, and unresolved decisions.
+- Require subagents to load `agent-rules`.
+- Reuse findings across planning turns. Do not repeat research unless new requirements invalidate it.
+- Verify decision-critical claims against their cited evidence.
+- If delegation is unavailable or fails, report the limitation. Do not silently perform the whole batch in the primary session.
+- Ask the next user question only after incorporating relevant research findings.
+
 # Questioning Checklist
 
 Walk down this decision tree:
