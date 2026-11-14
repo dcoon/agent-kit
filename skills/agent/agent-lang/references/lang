@@ -1,0 +1,64 @@
+# agent-lang v0.1
+
+A mini DSL for agent prompts and skills inspired by Unix philosophy and tools. It aims to reduce model drift through familiar structure and explicit invariants while remaining readable and editable by humans. Token savings must not cost readability or reliable interpretation. A workflow must be understandable without a separate schema or skill reference.
+
+## Structure
+
+Use Markdown containing one main fenced `makefile` workflow. Additional syntax snippets are permitted. Prose outside the workflow is natural language. Within recipes, `INVARIANT`, `SLOT`, and `HUMAN APPROVAL REQUIRED` are agent instructions, not shell syntax.
+
+## Rules
+
+1. **Targets are phases.** `X: Y` means X depends on Y. Complete all prerequisites successfully before running X's recipe. A failed prerequisite blocks the dependent recipe. Ordering follows standard Make dependency semantics; listing sibling prerequisites does not create a serial dependency between them. Express required sequencing through dependency edges.
+2. **Sentinel first.** The first recipe line of every target is the exact sentinel below. The agent skips it; real `make` fails when it reaches it.
+3. **Tabs.** Recipe lines start with a tab, never spaces.
+4. **Comments.** A `#` line directly above an invariant can explain, in one line, why the rule exists.
+5. **Invariants.** Use `INVARIANT[domain-NN]: <expression>`, always spelled in full, on one line. Prefer pseudo-TypeScript for concise conditions; use prose when clearer. Abstract properties and predicates are semantic shorthand, not claims that real APIs exist; they need not exist or be implemented. Make their meaning and scope clear locally. If a contract is long, put it in a reference file and name it in the invariant; keep the workflow's essential meaning local.
+6. **Human approval.** `HUMAN APPROVAL REQUIRED: <what needs approval>` is a standalone recipe instruction, never a nested invariant. Follow the protocol below. Approval gates are explicit workflow choices, not implicit language requirements for commit or push.
+7. **Shell.** Only `@<command>` denotes an actual shell command, except the skipped sentinel. Never pass agent instructions or the whole workflow to a shell. Run commands only when applicable preconditions and permissions are satisfied; preserve during-action constraints and verify postconditions after the action.
+8. **Slots.** `SLOT[name]: <capability and intent>` requests a named capability without fixing its provider. Follow the resolution rules below.
+9. **Subset.** Allowed: targets, prerequisites, `.PHONY` declarations, recipe lines, comments, `INVARIANT`, `SLOT`, `HUMAN APPROVAL REQUIRED`, `@` commands, and the sentinel. Not allowed: variables, functions, includes, pattern rules, or `.ONESHELL`. `.PHONY` is a declaration and does not need its own recipe or sentinel.
+10. **Version.** Put `# agent-lang v0.1` as the first line of the main workflow block.
+
+## Invariant timing
+
+Invariants are conditions scoped to their phase and applicable code changes, not executable assertions or proof that a result already exists. Their expressions specify the relevant timing: check preconditions before an action, maintain constraints during it, and verify postconditions afterward. Do not require an action's postconditions to be true before performing that action. If timing is materially ambiguous, ask rather than guessing.
+
+Use familiar boolean, comparison, and method notation. Temporal words such as `before`, `after`, and `only after` express ordering, not executable TypeScript. `&&` combines conditions without imposing temporal order; avoid ambiguous `=>` for ordering or implication. This notation requires no types, schemas, multiline invariant blocks, runtime, or compiler. Abstract expressions still require evidence from relevant inspection, review, or checks; a predicate's name is not proof.
+
+In the storage example, `key` identifies the affected cache entry and `durableWrite(key)` its durable replacement write. Review the applicable code paths and check evidence of successful write-before-eviction ordering; no API with these names is required.
+
+```makefile
+	# Avoid destroying the only copy
+	INVARIANT[storage-01]: Before replacing stored data, a recoverable copy exists.
+	# Do not expose incomplete writes
+	INVARIANT[storage-02]: cache.evict(key) only after durableWrite(key).succeeded
+```
+
+## Slots
+
+A slot names a capability the skill needs while leaving provider and format unspecified until runtime. At its position in the recipe, use the caller's skill description and context to resolve it against available skills and tools, including MCP tools, then perform the requested action. Choose a suitable provider and use it as available; do not require provider changes, type changes, or a shared schema.
+
+Each slot line must explicitly tell the agent to use an available skill or tool to perform the action. Naming a capability alone may not trigger provider discovery. Do not encode a provider name or impose a format unless the caller's intent requires it. Resolve autonomously when one suitable provider is clear. A slot conveys intent but does not override provider permissions, safety rules, or required confirmation. Ask the user if no safe suitable provider is available or if choices materially change the outcome.
+
+```makefile
+	SLOT[record-memory]: Use an available skill or tool to persist this project's durable decision and rationale.
+	SLOT[record-task]: Use an available skill or tool to record this actionable project task with its context.
+```
+
+## Sentinel
+
+```makefile
+	@echo "agent-lang: not a runnable script. Agent follows this recipe." >&2; exit 1
+```
+
+Under `make`, this line prints the message and fails. The agent does not execute it. It is the first recipe line of every target; do not shorten or replace it. It guards against accidental execution, not deliberate bypass or arbitrary unsafe shell use.
+
+## Human approval protocol
+
+At `HUMAN APPROVAL REQUIRED`, stop and ask the human to approve the named item. Do not continue the recipe until the human explicitly approves that item in this conversation. Silence or a related message is not approval. Include this protocol once in every authored skill so its workflow is self-contained.
+
+## Naming
+
+Use a lowercase kebab-case domain followed by a two-digit number for invariant identifiers: `async-ui-01`, `storage-02`, `git-branch-01`. Descriptive identifiers focus attention and give reviewers a citation handle.
+
+For a complete workflow, see [example](example). Extra human guidance is in [help](help). Neither reference is required to interpret a properly self-contained agent-lang skill.

@@ -1,6 +1,7 @@
 # Obsidian vault settings (per-machine workspace state)
 .obsidian/
 .opencode/
+.serena/
 
 # OS files
 .DS_Store

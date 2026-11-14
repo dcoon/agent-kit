@@ -1,0 +1,41 @@
+# Human help
+
+agent-lang is a prompt notation, not a build tool or an executable scripting language. Markdown supplies context, Make-style dependencies express workflow order, and recipe instructions state constraints and capability requests. TypeScript-style expressions are a familiar way to state contracts, not a requirement to supply a TypeScript runtime.
+
+## Reading a workflow
+
+Start at the requested target and follow its prerequisite edges backward. In the worked example, `finish` needs `push`, which needs `commit`, then `review`, `impl`, and `approved-plan`. Execute recipes in dependency order, beginning with `approved-plan`. If a prerequisite fails, its dependent recipe cannot proceed.
+
+For `publish: test review`, both prerequisites must succeed before `publish`. This notation does not mean that `test` must complete before `review`. If review needs test results, declare that dependency explicitly.
+
+A recipe's first line is a safety sentinel that the agent skips. Other `@` lines are shell commands. Invariants, slots, and approval instructions belong to the agent and must never be sent to a shell. Do not run the workflow through `make` to execute agent instructions.
+
+## Writing useful contracts
+
+State a condition whose satisfaction can be checked, with its timing. Prefer pseudo-TypeScript for concise invariants; use prose when clearer. Abstract properties and predicates are allowed without existing APIs or implementing them. Explain their meaning and scope locally: `result.isCorrect()` alone says too little, but a predicate tied to specific acceptance criteria can be useful shorthand. Do not present semantic shorthand as a real API or assume that naming a predicate proves it holds.
+
+Use familiar boolean, comparison, and method notation. `before`, `after`, and `only after` specify timing, not executable TypeScript. `&&` does not imply temporal order; avoid ambiguous `=>`. Keep each invariant on one line, without types, schemas, multiline blocks, a runtime, or a compiler.
+
+Separate conditions from actions. An invariant about successful review does not itself perform a review. Add an explicit capability slot for the review, then verify the condition. Likewise, a test command produces evidence; merely writing a passing-tests condition does not.
+
+Constraints apply within their phase and to applicable code changes, before, during, or after the relevant action. Avoid saying that all invariants must already hold before every command: postconditions are checked after the action that establishes them. Require relevant inspection, review, or check evidence for abstract expressions too. Keep a one-line reason above a contract when it helps explain a non-obvious restriction.
+
+## Keeping workflows portable
+
+A slot requests intent, not an integration. Explicitly ask for an available skill or tool and provide enough context to choose it. The caller's skill description and context determine the runtime provider and format. A missing provider or materially different safe choices call for a question, not an invented API or a provider modification.
+
+Slots retain normal permissions and required confirmations. In the worked example, the memory-recording slot is intentionally absent: a delivery workflow does not need an unrelated persistent write merely to demonstrate syntax.
+
+## Keeping workflows self-contained
+
+Include essential execution rules and the approval protocol in the authored skill. Keep gates on their own recipe lines. Approval gates are author-selected boundaries; agent-lang does not automatically add them to commit or push. Platform permissions and other applicable confirmation rules still apply.
+
+Use one main workflow block for the complete dependency graph. Short syntax snippets may appear elsewhere. `.PHONY` declarations are valid and help distinguish phases from file targets. Neither `.PHONY` nor the sentinel turns this notation into a runnable Makefile.
+
+Use optional references for long contracts, rationale, and examples. Do not require readers to load a schema or reference merely to understand what a phase does.
+
+## Review before use
+
+Check that each phase has the exact sentinel first, recipe indentation uses tabs, dependencies encode every required ordering, invariants have full names and explicit timing where needed, and slots direct actual capability use. Confirm that invariant scope and abstract predicates are locally clear, temporal order does not rely on `&&` or ambiguous `=>`, and satisfaction requires evidence rather than an assumed true predicate. Confirm that only real shell commands carry `@`, semantic shorthand is not presented as a real API, and each declared gate names the item requiring approval.
+
+The [example](example) is instructional, not authorization to modify a repository or publish changes. Adapt it to the actual task, repository, permissions, and available capabilities before use.

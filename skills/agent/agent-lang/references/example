@@ -1,0 +1,58 @@
+# Delivery workflow example
+
+Illustrative workflow for an authorized change in a repository whose checks run with `npm test`. Reading this example does not authorize implementation, staging, committing, or pushing. Substitute the project's actual checks and confirm task scope and permissions before using it. The UI and storage invariants illustrate requirements for a task that touches both areas; omit inapplicable contracts when adapting the example.
+
+Targets run only after their prerequisites succeed, using standard Make dependency order; failed prerequisites block dependents. Skip every first-line sentinel. Execute only subsequent `@` shell commands, never agent instructions or the whole block. Invariants state conditions before, during, or after the relevant action, not assumed outcomes. At a slot, resolve an available skill or tool and its format from the caller's skill description and context, preserving normal permissions and confirmations; ask if none is safe and suitable or if choices materially affect the outcome.
+
+Pseudo-TypeScript invariants below are semantic shorthand, not executable instructions or claims that APIs exist. `branch` is the current branch; `destination.isAuthorized()` means the push destination is the intended authorized remote. In applicable changed code, `component` is the same UI component across each awaited UI operation, `isAlive()` means still mounted, and `mutateState()` means updating its state. `key` identifies the affected cache entry; `durableWrite(key)` is its durable replacement write. Verify these conditions through branch/remote inspection, code review, and relevant checks; abstract expressions are not proof.
+
+At `HUMAN APPROVAL REQUIRED`, stop and ask for explicit human approval of the named item in this conversation; wait before continuing the recipe. Silence or a related message is not approval.
+
+```makefile
+# agent-lang v0.1
+.PHONY: finish push commit review impl approved-plan
+
+finish: push
+	@echo "agent-lang: not a runnable script. Agent follows this recipe." >&2; exit 1
+	# Report the actual workspace state, including unrelated changes
+	@git status --short
+	SLOT[report-result]: Use an available skill or tool to report the delivered commit, check results, push result, and remaining workspace changes to the user.
+
+push: commit
+	@echo "agent-lang: not a runnable script. Agent follows this recipe." >&2; exit 1
+	# Pushing to main skips this workflow's branch-review boundary
+	INVARIANT[git-branch-01]: before push: branch.name !== "main" && destination.isAuthorized()
+	@git push -u origin HEAD
+
+commit: review
+	@echo "agent-lang: not a runnable script. Agent follows this recipe." >&2; exit 1
+	SLOT[stage-changes]: Use an available skill or tool to inspect and stage only the reviewed changes for this task, preserving unrelated user work.
+	@git diff --cached --stat
+	# Keep unrelated changes out of the delivery commit
+	INVARIANT[git-scope-01]: Before committing, the staged diff contains only the reviewed task changes and at least one intended change.
+	@git commit -m "Implement approved change"
+
+review: impl
+	@echo "agent-lang: not a runnable script. Agent follows this recipe." >&2; exit 1
+	SLOT[review-diff]: Use an available skill or tool to review the completed diff against the approved plan and applicable invariants, using fresh context when available; resolve findings within the approved scope and rerun affected checks.
+	# Review must produce evidence, not an assumed successful result
+	INVARIANT[review-01]: After review, no known violation of the approved plan or applicable invariants remains, and checks for the final reviewed changes pass.
+
+impl: approved-plan
+	@echo "agent-lang: not a runnable script. Agent follows this recipe." >&2; exit 1
+	# Async UI callbacks must not touch unmounted components
+	INVARIANT[async-ui-01]: after each await: component.isAlive() before component.mutateState()
+	# Evict cache only after the durable write succeeds
+	INVARIANT[storage-02]: cache.evict(key) only after durableWrite(key).succeeded
+	SLOT[implement-plan]: Use an available skill or tool to implement the approved plan within its authorized scope, preserving unrelated user changes and satisfying the UI and storage constraints above.
+	@npm test
+	INVARIANT[checks-01]: After implementation and testing, the requested changes are present and the project's checks pass; failures block review until resolved within scope or escalated to the user.
+
+approved-plan:
+	@echo "agent-lang: not a runnable script. Agent follows this recipe." >&2; exit 1
+	SLOT[prepare-plan]: Use an available skill or tool to inspect the requested change and present an implementation plan with scope, risks, and verification steps, without implementing it yet.
+	# No implementation before approval of the presented plan
+	HUMAN APPROVAL REQUIRED: The presented implementation plan, including its scope and verification steps.
+```
+
+Only the plan approval gate is declared here. Commit and push remain subject to applicable permissions and confirmations; this example does not introduce mandatory commit or push gates as language semantics.
