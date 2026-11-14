@@ -4,7 +4,7 @@ A mini DSL for agent prompts and skills inspired by Unix philosophy and tools. I
 
 ## Structure
 
-Use Markdown containing one main fenced `makefile` workflow. Additional syntax snippets are permitted. Prose outside the workflow is natural language. Within recipes, `INVARIANT`, `SLOT`, and `HUMAN APPROVAL REQUIRED` are agent instructions, not shell syntax.
+Use Markdown containing one main fenced `makefile` workflow. Additional syntax snippets are permitted. Prose outside the workflow is natural language. Within recipes, plain natural-language actions, `INVARIANT`, `SLOT`, and `HUMAN APPROVAL REQUIRED` are agent instructions, not shell syntax.
 
 ## Rules
 
@@ -14,14 +14,16 @@ Use Markdown containing one main fenced `makefile` workflow. Additional syntax s
 4. **Comments.** A `#` line directly above an invariant can explain, in one line, why the rule exists.
 5. **Invariants.** Use `INVARIANT[domain-NN]: <expression>`, always spelled in full, on one line. Prefer pseudo-TypeScript for concise conditions; use prose when clearer. Abstract properties and predicates are semantic shorthand, not claims that real APIs exist; they need not exist or be implemented. Make their meaning and scope clear locally. If a contract is long, put it in a reference file and name it in the invariant; keep the workflow's essential meaning local.
 6. **Human approval.** `HUMAN APPROVAL REQUIRED: <what needs approval>` is a standalone recipe instruction, never a nested invariant. Follow the protocol below. Approval gates are explicit workflow choices, not implicit language requirements for commit or push.
-7. **Shell.** Only `@<command>` denotes an actual shell command, except the skipped sentinel. Never pass agent instructions or the whole workflow to a shell. Run commands only when applicable preconditions and permissions are satisfied; preserve during-action constraints and verify postconditions after the action.
-8. **Slots.** `SLOT[name]: <capability and intent>` requests a named capability without fixing its provider. Follow the resolution rules below.
-9. **Subset.** Allowed: targets, prerequisites, `.PHONY` declarations, recipe lines, comments, `INVARIANT`, `SLOT`, `HUMAN APPROVAL REQUIRED`, `@` commands, and the sentinel. Not allowed: variables, functions, includes, pattern rules, or `.ONESHELL`. `.PHONY` is a declaration and does not need its own recipe or sentinel.
+7. **Actions and shell.** Interpret tab-indented plain natural-language actions in recipe order, including conditional stops. Only `@<command>` denotes an actual shell command, except the skipped sentinel. Never pass agent instructions or the whole workflow to a shell. All actions remain subject to applicable permissions and confirmations; check preconditions before relevant actions, preserve constraints during them, and verify postconditions afterward.
+8. **Slots.** Use `SLOT[name]: <capability and intent>` only when a capability needs runtime provider discovery. It requests a named capability without fixing its provider. Follow the resolution rules below; use ordinary prose actions when discovery is unnecessary.
+9. **Subset.** Allowed: targets, prerequisites, `.PHONY` declarations, plain natural-language recipe actions, comments, `INVARIANT`, `SLOT`, `HUMAN APPROVAL REQUIRED`, `@` commands, and the sentinel. Not allowed: variables, functions, includes, pattern rules, or `.ONESHELL`. `.PHONY` is a declaration and does not need its own recipe or sentinel.
 10. **Version.** Put `# agent-lang v0.1` as the first line of the main workflow block.
 
 ## Invariant timing
 
-Invariants are conditions scoped to their phase and applicable code changes, not executable assertions or proof that a result already exists. Their expressions specify the relevant timing: check preconditions before an action, maintain constraints during it, and verify postconditions afterward. Do not require an action's postconditions to be true before performing that action. If timing is materially ambiguous, ask rather than guessing.
+Before starting phase actions, read all invariants declared anywhere in the phase and applicable skill-wide invariants. A phase invariant governs the whole declaring phase, including actions before its line, and applicable code changes; it is not an executable assertion or proof that a result already exists. Check preconditions before relevant actions, maintain constraints during them, and verify postconditions afterward. Do not require an action's postconditions to be true before performing that action. If timing is materially ambiguous, ask rather than guessing.
+
+Explicitly named skill-wide invariants may appear outside the workflow, for example as Markdown bullets under `## Skill-wide invariants`, with a sentence saying they govern every phase and referenced workflow throughout. They cannot override higher-priority instructions or authorize prohibited actions.
 
 Use familiar boolean, comparison, and method notation. Temporal words such as `before`, `after`, and `only after` express ordering, not executable TypeScript. `&&` combines conditions without imposing temporal order; avoid ambiguous `=>` for ordering or implication. This notation requires no types, schemas, multiline invariant blocks, runtime, or compiler. Abstract expressions still require evidence from relevant inspection, review, or checks; a predicate's name is not proof.
 
@@ -36,7 +38,7 @@ In the storage example, `key` identifies the affected cache entry and `durableWr
 
 ## Slots
 
-A slot names a capability the skill needs while leaving provider and format unspecified until runtime. At its position in the recipe, use the caller's skill description and context to resolve it against available skills and tools, including MCP tools, then perform the requested action. Choose a suitable provider and use it as available; do not require provider changes, type changes, or a shared schema.
+A slot names a capability that needs runtime provider discovery while leaving provider and format unspecified until runtime. Ordinary actions do not need slots. At its position in the recipe, use the caller's skill description and context to resolve it against available skills and tools, including MCP tools, then perform the requested action. Choose a suitable provider and use it as available; do not require provider changes, type changes, or a shared schema.
 
 Each slot line must explicitly tell the agent to use an available skill or tool to perform the action. Naming a capability alone may not trigger provider discovery. Do not encode a provider name or impose a format unless the caller's intent requires it. Resolve autonomously when one suitable provider is clear. A slot conveys intent but does not override provider permissions, safety rules, or required confirmation. Ask the user if no safe suitable provider is available or if choices materially change the outcome.
 

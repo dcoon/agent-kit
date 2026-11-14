@@ -5,53 +5,42 @@ description: "Commands and structural protocols for discovering, installing, and
 
 # NPX Skills Management
 
-Use the `npx skills` CLI to find, install, verify, and maintain skills for yourself and other project workflows.
+## Skill-wide rules
 
-## Guards
+Rules in this reference govern route and the caller's approved apply; higher-priority permissions prevail. Read-only discovery does not require edit authorization.
 
-*   **Check flags first:** read the help of the trusted, already-installed CLI for `add` and `experimental_sync` before relying on any flag. Subcommand help may print only global help; then use docs matching the installed version. Upstream `main` docs (https://github.com/vercel-labs/skills/blob/main/docs/commands.md) may differ, so treat them as a fallback only. If no matching-version evidence exists, report the flags as unverified.
-*   **Consent:** `npx` may download code. Prefer an already-installed, trusted CLI. Get explicit user consent before any `npx` run that downloads the package, and before any install, update, remove, or sync.
-*   **Scope:** project scope by default; global scope or a specific agent target only when the user asks.
-*   **Filtering:** install named skills, not whole repos. Select requested skills with the installed CLI's documented selector, unless the source ships exactly one skill. An `@` suffix in CLI examples can be ambiguous; verify the installed CLI's syntax before relying on it. `package.json` entries follow the manifest `@skill-name` rules below.
+- INVARIANT[consent-01]: Explicit consent is required separately before an `npx` package download and before each install, update, remove, or sync; confirm before sync. Download consent does not authorize skill operations. Ask before installing the CLI. Project scope is default; use global scope or a specific agent target only on request.
+- Before using CLI flags, check version-matching `add` and `experimental_sync` help on a trusted installed CLI. If subcommand help shows only global help, use matching-version docs; use [upstream main docs](https://github.com/vercel-labs/skills/blob/main/docs/commands.md) only as a fallback and report flags unverified if matching-version evidence is unavailable. Verify CLI selector syntax; `@` in CLI examples is ambiguous. Select named skills unless the source has exactly one.
+- `experimental_sync` handles manifest `skills` and already-installed npm dependencies; it can fetch git sources and remove unlisted synced skills, but does not install npm dependencies. `experimental_install` restores a lockfile and is not a sync prerequisite. Do not commit unless asked.
+- INVARIANT[manifest-03]: Immediately after each manifest edit, parse JSON and verify unrelated fields and entries remain unchanged, including in the target project's manifest, even if no sync occurs. Before any sync, verify JSON parses.
 
-## Core CLI Actions
+For `agents/*/package.json` and `global/package.json`:
 
-*   **`experimental_sync`:** handles `package.json` `skills` entries and skills from already-installed npm dependencies; it does not install npm dependencies. It may fetch git sources remotely and remove synced skills no longer listed (covered by the consent rule above).
-*   **`experimental_install`:** restores skills from the lockfile. It is not a prerequisite for `experimental_sync`.
+- Ask which target if multiple manifests exist and the request does not name a mode. Add or remove only requested entries; preserve unrelated entries and fields.
+- INVARIANT[manifest-01]: Before add, `upstream.has(skill) && source.countVerified && (source.skillCount === 1 || entry.selects(skill))`. These predicates express evidence, not APIs: verify the exact skill and source count upstream without installing (e.g. `add --list`, after checking flags); reuse adequate prior verification or stop if unavailable. `entry.selects(skill)` means a flat `owner/repo@skill-name` entry selecting that skill.
+- INVARIANT[manifest-02]: Before each edit or batch, `proposedManifest.skills.length <= 5`; if exceeded, stop and ask. The cap applies to each mode and `global/package.json`.
+- To apply mode skills, copy the mode's `skills` array into the target project's `package.json`, run `experimental_sync` after confirmation, and include the updated lockfile as the project requires.
 
-## Skill Manifests (agents/*/package.json)
+## Discovery and structure
 
-Read this section when adding or removing skills in an agent-kit mode manifest (e.g. `agents/sysadmin/package.json`) or `global/package.json`. Each entry is a flat string, `owner/repo@skill`:
+Before installing, check existing placements (e.g. `~/.agents/skills/`). After installing, locate the skill using `list` or directory inspection and verify OpenCode discovery against the version's discovery and permission docs ([V2](https://opencode.ai/v2/docs/skills)). CLI `list` does not prove OpenCode advertises the skill; do not assume a project path has a global equivalent.
 
-```json
-{
-  "private": true,
-  "skills": [
-    "owner/repo@skill-a",
-    "owner/other-repo@skill-b"
-  ]
-}
-```
-
-*   **Resolve the target:** if the request does not name a mode and several manifests exist, ask which one.
-*   **Add or remove only the requested entry.** Preserve unrelated entries and other fields.
-*   **Cap:** each mode manifest and `global/package.json` holds at most five skills. Stop and ask if an add would exceed five.
-*   **Filter every entry with `@skill-name`** unless the source repo ships exactly one skill. Never add an unfiltered source that installs a whole multi-skill repo.
-*   **Verify upstream before adding:** list the source's skills without installing (`add --list`, after checking supported flags in help) and confirm the skill exists and how many the repo ships. Listing may download, so get consent first.
-*   After editing, confirm the JSON parses.
-*   **Apply:** modes install by copying the mode's `skills` array into the target project's `package.json` and running `experimental_sync`, then including the updated lockfile as the project requires. Confirm with the user before running it. Do not commit unless asked.
-
-## Discovery & Installation Paths
-
-Installation does not guarantee discovery: the CLI writes to agent directories, but OpenCode uses only the locations it scans. Find where the skill was installed (`list` or directory inspection), then compare that location with the discovery and permission docs for the OpenCode version in use (V2: https://opencode.ai/v2/docs/skills). `list` shows locations only and cannot prove OpenCode advertises the skill. Do not assume a project path has a global equivalent.
+For portable `SKILL.md`, write YAML frontmatter with `name` and `description`. OpenCode V2 makes frontmatter optional, but needs `description` to advertise the skill to the model. Before running any skill script, obey actual permissions; do not assume a prompt will appear.
 
 ## Workflow
 
-### 1. Verify the environment
-*   Check the installed CLI's Node requirement (its help or `package.json`) and compare it to `node --version`. The requirement is version-specific.
-*   Check existing placements (e.g. `ls ~/.agents/skills/`) before installing.
+During the caller's `route`, follow `manage` and return findings and an ordered plan. The caller reports findings, then applies approved work once under its snapshot and concurrent-change guards.
 
-### 2. Skill structure and permissions
-*   **Portable spec:** `SKILL.md` requires YAML frontmatter with `name` and `description` per the Agent Skills spec. Always write both.
-*   **OpenCode V2 runtime:** frontmatter is optional there. A `description` is needed for the model to be told the skill is available automatically.
-*   Obey the actual permission policy before running any skill script. Do not assume a prompt will appear.
+Agent instructions, not a runnable Makefile: never submit the block to a shell; skip the sentinel.
+
+```makefile
+# agent-lang v0.1
+.PHONY: manage
+
+manage:
+	@echo "agent-lang: not a runnable script. Agent follows this recipe." >&2; exit 1
+	INVARIANT[route-01]: Route makes no project or skill-file edits and does not install, update, remove, or sync skills.
+	Inspect the request. If the CLI is needed, check its version-specific Node requirement (help or package.json) against node --version before use. If the CLI or requirement is unavailable, report the blocker and ask how to proceed; do not use the CLI until its requirement is verified.
+	Perform permitted read-only find, list, and discovery during route, including upstream verification needed for a proposed add. If discovery needs unavailable capability or consent, report the blocker and ask for authorization; wait before the blocked action, but continue other permitted discovery without deferring it to apply.
+	Return findings and an ordered plan for the requested work, including applicable skill-wide rules and discovery postconditions.
+```

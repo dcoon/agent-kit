@@ -9,40 +9,64 @@ metadata:
   opencode/autoinvoke: false
 ---
 
-## Workflow
-
-1. Identify targets
-	1. If skill or SKILL.md given, targets are directory containing the skill, its SKILL.md, and all bundled files in subdirs including references/, scripts/, agents/, etc.
-	2. If reference file given, target is just that file
-2. For each target, run the following checklists:
-	1. directory -> linter
-	2. SKILL.md -> frontmatter, template, references, size, clarity 
-	3. references/ or agents/ -> linter, template, size, clarity
-	4. scripts/ -> size
-3. Reply findings to user as unified report 
+Contents: [Guards](#guards) · [Workflow](#workflow) · [Checklists](#checklists) · [Report format](#report-format) · [Additional information](#additional-information).
 
 ## Guards
 
-1. Never edit files. 
+This invariant governs every phase of this lint workflow and any workflow it invokes:
+
+- INVARIANT[lint-safety-01]: Never edit files during this lint workflow.
+
+The calling skill's skill-wide invariants also apply throughout this workflow.
+
+## Workflow
+
+Follow `report`: complete prerequisites successfully before dependent phases; a failed prerequisite blocks its dependent. Sibling prerequisites have no implied order. Skip each phase's first recipe line, the sentinel. These recipes are agent instructions, not a runnable Makefile; never submit them to a shell. Only subsequent `@` lines would be shell commands; this workflow has none.
+
+Before phase actions, read all invariants declared in that phase and applicable skill-wide invariants. A phase invariant governs its whole phase, including earlier lines. Check preconditions before relevant actions, maintain constraints during them, and verify postconditions afterward; do not assume postconditions in advance.
+
+```makefile
+# agent-lang v0.1
+.PHONY: identify check report
+
+report: check
+	@echo "agent-lang: not a runnable script. Agent follows this recipe." >&2; exit 1
+	Reply to the user with a unified report using the report format below.
+
+check: identify
+	@echo "agent-lang: not a runnable script. Agent follows this recipe." >&2; exit 1
+	For directories, apply the Linter checklist.
+	For SKILL.md, apply Frontmatter, Template, References, Size, and Clarity.
+	For reference files or files in agents/, apply Linter, purpose-appropriate Template, Size, and Clarity; classify each file by purpose first.
+	For scripts/, apply Size.
+	Record findings and blocked checks for the report; they do not themselves fail this phase. If inspection cannot proceed, stop and report the blocker.
+
+identify:
+	@echo "agent-lang: not a runnable script. Agent follows this recipe." >&2; exit 1
+	If a skill or SKILL.md is given, target its skill directory, SKILL.md, and all bundled files in subdirectories, including references/, scripts/, and agents/.
+	If a reference file is given, target only that file.
+```
 
 ## Checklists
 
 ### Linter
 
-1. Exec `uvx --offline lintlang scan <path>` on the dir or filenames to be linted. If it fails because lintlang is not cached, report the blocker; do not download or install without explicit user authorization.
+- Run `uvx --offline lintlang scan <path>` on the directory or filenames only when it can run without installing, downloading, or editing files. Otherwise report the blocker. If lintlang is not cached, report the blocker; any installation or download requires explicit user authorization outside this read-only lint workflow.
 
 ### Frontmatter
 
-- YAML frontmatter is present and conforms with [template](template.md).
+- For SKILL.md, YAML frontmatter is present and conforms with [template](template.md). The directory-matching name rule applies to SKILL.md, not every reference.
 - `description` states what the skill does and when to use it, with concrete trigger phrases and keywords. Name and description are the metadata usually loaded up front for discovery, so keep them concise and specific enough to distinguish the skill from similar ones. Flag vague one-liners.
 
 ### Template
 
-- Body conforms with [template](template.md).  Mandatory (not tagged #optional in template) must be present.
+- Check the body against the applicable guidance in [template](template.md). Accept semantic equivalents of workflows and scoped guards or invariants, including agent-lang; literal Workflow or Guards headings and numbered lists are not required.
+- Classify references by purpose. Operational instructions need clear actions and applicable safety constraints; documentation, guides, specifications, and examples do not need workflow or frontmatter boilerplate merely because they are references.
 
 ### References
 
-- Every file in subdirs references/ and scripts/ must be linked to in parent SKILL.md file under section References.
+- Every file in subdirectories references/ and scripts/ must be linked from the parent SKILL.md with guidance on when to read or use it. Links and guidance must be discoverable; a particular heading or table is not required.
+
 ### Size
 
 - Keep `SKILL.md` under  500 lines, per the spec's guidance. This is a heuristic, not a requirement; judge by whether content is needed on activation.
@@ -51,7 +75,7 @@ metadata:
 - Use `scripts/` for deterministic, repeated work when the same steps recur across runs or must produce identical results.
 - Remove redundant instructions and examples within and across skill files; retain brief summaries and examples that serve a distinct purpose.
 - Prefer trusted, available tool help or documentation over copied option lists. Keep essential commands, workflow decisions, and project-specific constraints. If help is unavailable, report the limitation; do not download or install tools without authorization.
-- Broken links: check that actual paths (files or directories) cited by `SKILL.md` or files in `references/` exist relative to the skill root; report missing ones. Exclude illustrative examples and explicitly optional paths.
+- Broken links: check that actual paths (files or directories) cited by `SKILL.md` or files in `references/` exist; resolve links relative to the file containing them, or to the skill root when explicitly specified. Report missing ones. Exclude illustrative examples and explicitly optional paths.
 - Unreferenced files: a bundled file nothing in the skill points to may be an orphan. Report it as a possible orphan, since it may be used externally.
 - Measure with `wc -lc`: the target plus every other text file you actually inspect in this review. 
 

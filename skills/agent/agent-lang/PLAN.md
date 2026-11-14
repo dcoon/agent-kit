@@ -118,6 +118,9 @@ approved-plan:
 	1. Define and test target gates: each gate stops, asks, and does not proceed without explicit approval
 	2. Baseline: 5–10 tasks on current prose skills. Record drift and tokens.
 	3. Pilot one skill in agent-lang. Run the same tasks. Compare.
+	4. Refactor agent instructions with agent-skill without specifying a format. Expected: agent-lang.
+	5. Refactor agent instructions with `use prose`. Expected: prose.
+	6. Refactor agent instructions with `make it human-readable` alone. Expected: agent-lang.
 4. Update agent-kit/agent-skill to use agent-lang
 5. Use agent-skill to refactor other agent-kit skills, then re-run tests
 6. Enhance langlint to check agent-lang format (only after syntax is frozen)
@@ -146,6 +149,13 @@ approved-plan:
 - [ ] Shorten the sentinel message (lower verbosity). Keep the `exit 1`.
 - [ ] Verify the sentinel fails loudly under `make` for a real target.
 - [ ] Pilot one skill in agent-lang and run the baseline comparison.
+- [x] Align agent-skill `references/lint.md` and `references/template.md`:
+  - Recognize semantic equivalents of workflows and skill-wide or phase-scoped guards, including agent-lang.
+  - Require discoverable reference links with useful read guidance, not a mandatory table.
+  - Classify reference docs by purpose so guides, specs, and examples do not require workflow or frontmatter boilerplate.
+  - Clarify that the directory-matching name applies to `SKILL.md`, not every reference.
+  - Preserve safety and progressive-disclosure checks.
+- [ ] Evaluate lint behavior end-to-end on prose and agent-lang examples to avoid false positives. A focused manual rubric simulation found no format false positives; no linter or workflows were executed.
 - [ ] Confirm the semantic linter location: `agent-kit/agent-skill:lang` or `dcoon/agent-kit:agent-lang/lint`. Pick one and update the Summary and Plan.
 - [ ] Rewrite the Gemini section's "Why This Design Works" claims as testable hypotheses.
 - [ ] Fix the translation matrix in the Gemini section (Swift and Python rows are incomplete).

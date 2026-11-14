@@ -8,7 +8,7 @@ Start at the requested target and follow its prerequisite edges backward. In the
 
 For `publish: test review`, both prerequisites must succeed before `publish`. This notation does not mean that `test` must complete before `review`. If review needs test results, declare that dependency explicitly.
 
-A recipe's first line is a safety sentinel that the agent skips. Other `@` lines are shell commands. Invariants, slots, and approval instructions belong to the agent and must never be sent to a shell. Do not run the workflow through `make` to execute agent instructions.
+A recipe's exact first line is a safety sentinel that the agent skips. Other `@` lines are shell commands. The agent interprets plain natural-language actions in order, including conditional stops. These actions, invariants, slots, and approval instructions must never be sent to a shell; never execute the whole workflow. Applicable permissions and confirmations still govern every action.
 
 ## Writing useful contracts
 
@@ -16,13 +16,15 @@ State a condition whose satisfaction can be checked, with its timing. Prefer pse
 
 Use familiar boolean, comparison, and method notation. `before`, `after`, and `only after` specify timing, not executable TypeScript. `&&` does not imply temporal order; avoid ambiguous `=>`. Keep each invariant on one line, without types, schemas, multiline blocks, a runtime, or a compiler.
 
-Separate conditions from actions. An invariant about successful review does not itself perform a review. Add an explicit capability slot for the review, then verify the condition. Likewise, a test command produces evidence; merely writing a passing-tests condition does not.
+Separate conditions from actions. An invariant about successful review does not itself perform a review. Add a plain-language review action when no provider discovery is needed, then verify the condition. Use a slot only when the capability needs runtime provider discovery. Likewise, a test command produces evidence; merely writing a passing-tests condition does not.
 
-Constraints apply within their phase and to applicable code changes, before, during, or after the relevant action. Avoid saying that all invariants must already hold before every command: postconditions are checked after the action that establishes them. Require relevant inspection, review, or check evidence for abstract expressions too. Keep a one-line reason above a contract when it helps explain a non-obvious restriction.
+Before phase actions, read all invariants declared anywhere in that phase and applicable skill-wide invariants. Phase invariants govern the entire declaring phase, including actions before their lines, and applicable code changes. Check preconditions before relevant actions, maintain constraints during them, and check postconditions after the actions that establish them; do not require postconditions beforehand. Require relevant inspection, review, or check evidence for abstract expressions too. Keep a one-line reason above a contract when it helps explain a non-obvious restriction.
+
+Explicitly named skill-wide invariants can appear outside the workflow, for example as Markdown bullets under `## Skill-wide invariants` with a sentence saying they govern every phase and referenced workflow throughout. They cannot override higher-priority instructions or authorize prohibited actions.
 
 ## Keeping workflows portable
 
-A slot requests intent, not an integration. Explicitly ask for an available skill or tool and provide enough context to choose it. The caller's skill description and context determine the runtime provider and format. A missing provider or materially different safe choices call for a question, not an invented API or a provider modification.
+Use a slot only when a capability needs runtime provider discovery; write ordinary actions as plain recipe prose. A slot requests intent, not an integration. Explicitly ask for an available skill or tool and provide enough context to choose it. The caller's skill description and context determine the runtime provider and format. A missing provider or materially different safe choices call for a question, not an invented API or a provider modification.
 
 Slots retain normal permissions and required confirmations. In the worked example, the memory-recording slot is intentionally absent: a delivery workflow does not need an unrelated persistent write merely to demonstrate syntax.
 
@@ -36,6 +38,6 @@ Use optional references for long contracts, rationale, and examples. Do not requ
 
 ## Review before use
 
-Check that each phase has the exact sentinel first, recipe indentation uses tabs, dependencies encode every required ordering, invariants have full names and explicit timing where needed, and slots direct actual capability use. Confirm that invariant scope and abstract predicates are locally clear, temporal order does not rely on `&&` or ambiguous `=>`, and satisfaction requires evidence rather than an assumed true predicate. Confirm that only real shell commands carry `@`, semantic shorthand is not presented as a real API, and each declared gate names the item requiring approval.
+Check that each phase has the exact sentinel first, recipe indentation uses tabs, dependencies encode every required ordering, invariants have full names and explicit timing where needed, and slots direct actual capability use. Confirm that invariant scope and abstract predicates are locally clear, temporal order does not rely on `&&` or ambiguous `=>`, and satisfaction requires evidence rather than an assumed true predicate. Confirm that only shell commands and the skipped first-line sentinel carry `@`, semantic shorthand is not presented as a real API, and each declared gate names the item requiring approval.
 
 The [example](example) is instructional, not authorization to modify a repository or publish changes. Adapt it to the actual task, repository, permissions, and available capabilities before use.
