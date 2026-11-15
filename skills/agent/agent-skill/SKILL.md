@@ -4,19 +4,16 @@ description: Create, find, install, lint, refactor, and compress agent skills an
 ---
 
 
-- INVARIANT[read-ref-rules]: Read [rules](reference/rules.md)
-- INVARIANT[consent-before-install-01]: before install(tool) -> user.explicitlyConsents(edits)
-- INVARIANT[consent-before-edits-01]: before edit() -> user.explicitlyConsents(edits)
-
-
 ```makefile
 # agent-lang v0.1
 SHELL := false
 .PHONY: route
 
-
 	
 route:
+	INVARIANT[read-ref-rules]: Read [rules](reference/rules.md)
+	INVARIANT[consent-before-install-01]: before install(tool) -> user.explicitlyConsents(edits)
+	INVARIANT[consent-before-edits-01]: before edit() -> user.explicitlyConsents(edits)
 	on(user.goal) -> sections.References.filter(r => r.UseWhen.matches(user.goal)).forEach(r => use(r.Ref) && invoke(r.Ref))
 
 ```
