@@ -1,16 +1,6 @@
 ---
 name: compress
 description: Transforms existing, verbose Markdown skills into a terse, token-optimized format for LLM consumption. Use when asked to compress, shrink, or token-optimize a SKILL.md or Markdown prompt.
-license: MIT
-metadata:
-  audience: developers
-  workflow: prompt-optimization
-  version: 1.0.0
-  triggers: optimize skill, compress markdown prompt, token optimization
-  requirements: "input_file: *.md"
-  cache: true
-  opencode/slash: true
-  opencode/autoinvoke: false
 ---
 
 # SKILL:OPTIMIZE_LLM_SKILL
