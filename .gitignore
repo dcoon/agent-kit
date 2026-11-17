@@ -40,3 +40,4 @@ venv/
 *.zip
 *.tar
 *.tar.gz
+*lock.json

@@ -6,5 +6,11 @@
   "skills": [
     "dcoon/agent-kit",
     "vercel-labs/skills@find-skills"
-  ]
+  ],
+  "dependencies": {
+    "opencode-runtime-fallback": "^0.3.1"
+  },
+  "allowScripts": {
+    "opencode-runtime-fallback@0.3.1": true
+  }
 }
