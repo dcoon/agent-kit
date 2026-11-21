@@ -1,0 +1,11 @@
+skills/agent/agent-lang/PLAN.md:168  [prose]  `---` fence marker in "Gemini Session Below" section is decorative padding with no functional purpose in the agent-lang v0.1 spec → Remove the `---` fence and its adjacent blank lines (167, 169-170), keeping only the `# Gemini Session Below` heading at line 166. (~3-5 lines/tokens)
+
+skills/agent/agent-lang/PLAN.md:160-164  [prose]  Four unchecked `[ ]` task items (lines 160-162, 164) at end of "Tasks" section are speculative "for later" scaffolding with no current caller for the agent-lang v0.1 spec: "Rewrite Gemini section's claims as testable hypotheses" (160), "Fix translation matrix in Gemini section" (161), "Retire Gemini example once revised example used in pilot" (162), "Move Gemini session to its own note once syntax is frozen" (164) are Gemini-specific future work unrelated to the core syntax specification → Move these 4 items to a separate "Future Work" section or remove them. (~4 lines/tokens)
+
+skills/dcoon/notebook/references/ingest.md:83-91  [prose]  "Facts vs. research" section (9 lines: lines 83-91) restates the principle from the "Procedure" section above that journal content should not be copied verbatim, then categorizes into "Facts"/"Research"/"Mixed content" with examples → Merge into or remove, relying on the Procedure section which already covers the same ground. (~9 lines/tokens, (check) since explicit categorization provides useful structure but overlaps with section above)
+
+skills/agent/agent-skill/references/compress.md:102-108  [prose]  Mermaid flowchart diagram (7 lines: ` ```mermaid ` fence + 5 content lines + ` ``` ` closing fence at lines 102-108) visualizes an instruction-state-transition flow that the surrounding prose already explains (CHK, RUN, GUARD, HALT) → Remove the diagram, replacing with a brief prose sentence if needed. (~7 lines/tokens)
+
+4 findings: 0 code, 4 prose. Est. removable: ~0 lines code, ~23 lines prose. (note: finding 3 marked (check) as removing it may lose the explicit facts-vs-research categorization, but the content is duplicative of the Procedure section above)
+
+Biggest win: Remove the decorative `---` fence from skills/agent/agent-lang/PLAN.md:168 (saves ~4 tokens with zero logic loss, highest impact-to-effort ratio).

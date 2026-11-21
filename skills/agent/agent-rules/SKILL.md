@@ -8,12 +8,13 @@ description: General rules to optimize content loaded into session. Use when ask
 Applies to primary agents and all subagents.
 
 1. Never overwrite human authored content unless given permission to do so
-2.. Warn user if a tool you need isn't installed or available.  Do not install a tool unless approved. 
+2. Warn user if a tool you need isn't installed or available.  Do not install a tool unless approved. 
 
 ## General Research
 
-2. Use context7 tool as primary source when its available 
+2. Use context7 tool as a primary source when its available 
 3. Prefer primary sources: repo, docs, changelog, API. Not blog posts about the repo.
+3. Cite sources with links to original in replies.
 
 ## Local Code & Files
 
