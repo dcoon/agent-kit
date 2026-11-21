@@ -31,7 +31,7 @@ Avoid repetition entirely
 3. Convert Static Knowledge → On-Demand Loading
 If large sections exist (patterns, async, performance, etc.):
 
-Remove them from the main prompt
+Refactor them from the main prompt
 If equivalent knowledge already exists elsewhere, link to it in `# References`
 If it is unique and necessary, create a compressed version in `references/<section>.md` then add a link to it in `# References`
 
@@ -89,6 +89,7 @@ Must be significantly more compact
 <AGENT_OR_SKILL_DEFINITION>
 
 10. Output
-Return ONLY the optimized agent definition in the required YAML + TXT format.
-If user asked for recommendation or preview, show a the result annotated with what changed and why.
+If user asked for recommendation or preview, show a the result annotated with what changed and why. Do NOT write a file; only return the preview.
 If user asked to `compress` or `edit` the prompt or skill, patch the file in place.
+
+Return ONLY the optimized agent definition in the required YAML + TXT format.
