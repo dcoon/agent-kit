@@ -1,5 +1,5 @@
 ---
-name:fedir-claude-compression
+name: fedir-claude-compression
 description: compress agent, prompt and skill files into ultra-efficient compact version (~80–180 tokens)
 ---
 
