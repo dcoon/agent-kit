@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "description": "orchestration mode: read-only sourcing, comparison, and recommendations.",
+  "skills": [
+    "dcoon/agent-skills",
+    "vercel-labs/skills@find-skills"
+  ]
+}
